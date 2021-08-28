@@ -3,17 +3,25 @@
 // bilisimarsivi.com
 
 function ilk_harf($gelen){
-		$gelen=substr($gelen , 0 , 1);
-		$degis=array("+",",",".","-","'","\"","&","!","?",":",";","#","~","=","/","$","£","^","(",")","_","<",">","A","B","C","Ç","D","E","F","G","Ğ","H","I","İ","J","K","L","M","N","O","Ö","P","R","S","Ş","T","U","Ü","V","Y","Z","Q","W","X","A","B","C","Ç","D","E","F","G","Ğ","H","I","İ","J","K","L","M","N","O","Ö","P","R","S","Ş","T","U","Ü","V","Y","Z","Q","W","X");
-		$ara=array("+",",",".","-","'","\"","&","!","?",":",";","#","~","=","/","$","£","^","(",")","_","<",">","a","b","c","ç","d","e","f","g","ğ","h","ı","i","j","k","l","m","n","o","ö","p","r","s","ş","t","u","ü","v","y","z","q","w","x","A","B","C","Ç","D","E","F","G","Ğ","H","I","İ","J","K","L","M","N","O","Ö","P","R","S","Ş","T","U","Ü","V","Y","Z","Q","W","X");
-		$gelen = str_replace($ara, $degis, $gelen);
-		return $gelen;
+	$gelen = mb_substr($gelen , 0 , 1);
+	$gelen = str_replace("ğ","Ü",$gelen);
+	$gelen = str_replace("ü","Ğ",$gelen);
+	$gelen = str_replace("ş","Ş",$gelen);
+	$gelen = str_replace("i","İ",$gelen);
+	$gelen = str_replace("ö","Ğ",$gelen);
+	$gelen = str_replace("ç","Ç",$gelen);
+	$gelen = str_replace("ı","I",$gelen);
+	return Strtoupper($gelen);
 }
 function orta($gelen){
-	$ara=array("+",",",".","-","'","\"","&","!","?",":",";","#","~","=","/","$","£","^","(",")","_","<",">","A","B","C","Ç","D","E","F","G","Ğ","H","I","İ","J","K","L","M","N","O","Ö","P","R","S","Ş","T","U","Ü","V","Y","Z","Q","W","X","a","b","c","ç","d","e","f","g","ğ","h","ı","i","j","k","l","m","n","o","ö","p","r","s","ş","t","u","ü","v","y","z","q","w","x");
-	$degis=array("+",",",".","-","'","\"","&","!","?",":",";","#","~","=","/","$","£","^","(",")","_","<",">","a","b","c","ç","d","e","f","g","ğ","h","ı","i","j","k","l","m","n","o","ö","p","r","s","ş","t","u","ü","v","y","z","q","w","x","a","b","c","ç","d","e","f","g","ğ","h","ı","i","j","k","l","m","n","o","ö","p","r","s","ş","t","u","ü","v","y","z","q","w","x");
-	$gelen = str_replace($ara, $degis, $gelen);
-	return $gelen;
+	$gelen = str_replace("Ü","ğ",$gelen);
+	$gelen = str_replace("Ğ","ü",$gelen);
+	$gelen = str_replace("Ş","ş",$gelen);
+	$gelen = str_replace("İ","i",$gelen);
+	$gelen = str_replace("Ğ","ö",$gelen);
+	$gelen = str_replace("Ç","ç",$gelen);
+	$gelen = str_replace("I","ı",$gelen);
+	return strtolower($gelen);
 }
 function baslik($metin){
 	$metin=preg_replace('/\s\s+/',' ',$metin);
@@ -26,8 +34,8 @@ function baslik($metin){
 	$giden=[];
 	foreach($dizi as $diz){
 		$diz=orta($diz);
-		if($diz!="ve"&&$diz!="veya"&&$diz!="ise"&&$diz!="ki"&&$diz!="vs"&&$diz!="de"&&$diz!="da"&&$diz!="ile"&&$diz!="yahut"){
-		array_push($giden, ilk_harf($diz).orta(substr($diz , 1)));
+		if($diz!="ve"&&$diz!="veya"&&$diz!="ise"&&$diz!="ki"&&$diz!="vs"&&$diz!="de"&&$diz!="da"&&$diz!="ile"&&$diz!="yahut"&&$diz!="ya"){
+		array_push($giden, ilk_harf($diz).orta(mb_substr($diz , 1)));
 		}else{
 			array_push($giden, orta($diz));
 		}
@@ -36,9 +44,9 @@ function baslik($metin){
 	echo str_replace($dot, $dots, $giden);
 }
 
-baslik('İSTANBUL VE KARŞIYAKA VEYA BİZDEN SORULUR. BİLİŞİMARŞİVİ.COM - istanbul ve karşıyaka veya bizden sorulur. bilişimarsivi.com');
-echo '<br>';
-baslik('mali (aa) "naber dedi " ve veya -mali- /lll/ fgdfdgfdg ins:@sahinbey_');
-
+baslik('ĞĞĞ ÜÜÜ ŞŞŞ İİİ ÖÖÖ ÇÇÇ III ğğğ üüü şşş iii ççç ööö ııı');
+echo '<hr>';
+baslik('İSTANBUL KARŞIYAKA BİZDEN SORULUR BİLİŞİMARŞİVİ.COM - istanbul karşıyaka bizden sorulur bilişimarşivi.com');
+echo '<hr>';
+baslik('"mali", veya ve hay yaşa ya da ise /aa/ dlsşal');
 ?>
-
